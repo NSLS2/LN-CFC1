@@ -1,0 +1,1632 @@
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 0
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):0}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):0}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 1
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):1}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):1}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 2
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):2}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):2}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 3
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):3}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):3}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 4
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):4}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):4}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 5
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):5}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):5}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 6
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):6}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):6}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#
+# BNL LLRF Controller Circular Buffer Channel Template
+#
+# Channel 7
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-Buf")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-Buf")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-Buf PP")
+# field(TPRO,    "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-Buf") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "Counts:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:QN-Calc")
+}
+
+#---------------------------------------------------------------------
+
+record(acalcout, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:QN-Calc") {
+  field(CALC,    "AA/B")
+  field(INAA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Scale")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:QN PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:QN") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IQ-Calc")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IQ-Calc") {
+  field(SNAM,    "IQ2AP")
+  field(FTA ,    "DOUBLE")
+  field(FTB ,    "DOUBLE")
+  field(FTVA ,   "DOUBLE")
+  field(FTVB ,   "DOUBLE")
+  field(NOA ,    "$(NELM2)")
+  field(NOB ,    "$(NELM2)")
+  field(NOVA,    "$(NELM2)")
+  field(NOVB,    "$(NELM2)")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:IN MSS")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:QN MSS")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I    MSS")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I  MSS")
+# field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Cmd:Time")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I")
+}
+
+# Amplitude
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}E:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}E:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}E:Sparse") {
+  field(FTVL,    "DOUBLE")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I")
+}
+
+#---------------------------------------------------------------------
+
+# Phase
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I") {
+  field(FTVL,    "DOUBLE")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I-ASub")
+}
+
+#---------------------------------------------------------------------
+
+record(aSub,     "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I-ASub") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:Sparse PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)-$(TD1):7}Phs:Sparse") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "deg:")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384
+  field(NELM,    "$(NELM3)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+#---------------------------------------------------------------------
+
+record(stringin, "$(S1){$(D1)-$(SD6)-$(TD1):7}Cmd:Time") {
+  field(DESC,    "Circular buf acquired at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):8}Val:I-I")
+# field(TPRO,    "1")
+}
+
+#
+#
+# End of channel
+#
+#------------------------------------------------------------------------------------------

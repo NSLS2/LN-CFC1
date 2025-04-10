@@ -1,0 +1,639 @@
+#================================================
+# MAR 31, 2015: Enable circular buffer
+
+record(calcout, "$(S1){$(D1)-$(SD6)}DI:Fill1-Calc") {
+  field(DESC,   "Circular buffer acquiring:")
+  field(CALC,   "(A&B)?1:0")
+  field(INPA,   "$(S1){$(D1)}DI:Ep2F-I CPP")
+  field(INPB,   "32768")
+  field(OOPT,   "Transition To Non-zero")
+  field(OUT,    "$(S1){$(D1)-$(SD6)}DI:Fill-Sts PP")
+}
+
+record(bi,      "$(S1){$(D1)-$(SD6)}DI:Fill-Sts") {
+  field(ZNAM,   "Stopped")
+  field(ONAM,   "Acquiring")
+}
+
+record(ao,      "$(S1){$(D1)-$(SD6)}State:Prog-Sts") {
+  field(DESC,   "Arming the circular buffer:")
+  field(LOPR,   "0")
+  field(HOPR,   "4")
+  field(PINI,   "YES")
+}
+
+record(seq,     "$(S1){$(D1)-$(SD6)}State:Arm00") {
+  field(DO0,    "0")
+  field(LNK0,   "$(S1){$(D1)-$(SD6)}Enbl:Rst PP")
+  field(DLY0,   "0.5")
+#
+  field(DO1,    "1")
+  field(LNK1,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+#
+  field(DO2,    "0")
+  field(LNK2,   "$(S1){$(D1)-$(SD6)}Enbl:Write PP")
+  field(DLY2,   "0.5")
+#
+  field(DO3,    "2")
+  field(LNK3,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+#
+  field(DO4,    "0")
+  field(LNK4,   "$(S1){$(D1)-$(SD6)}Enbl:Read PP")
+  field(DLY4,   "0.5")
+#
+  field(DO5,    "3")
+  field(LNK5,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+  field(FLNK,   "$(S1){$(D1)-$(SD6)}State:Arm01")
+}
+
+record(seq,     "$(S1){$(D1)-$(SD6)}State:Arm01") {
+#
+  field(DO0,    "1")
+  field(LNK0,   "$(S1){$(D1)-$(SD6)}Enbl:Read PP")
+  field(DLY0,   "0.5")
+#
+  field(DO1,    "4")
+  field(LNK1,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+#
+  field(DO2,    "1")
+  field(LNK2,   "$(S1){$(D1)-$(SD6)}Enbl:Write PP")
+  field(DLY2,   "0.5")
+#
+  field(DO3,    "5")
+  field(LNK3,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+#
+  field(DO4,    "1")
+  field(LNK4,   "$(S1){$(D1)-$(SD6)}Enbl:Rst PP")
+  field(DLY4,   "0.5")
+#
+  field(DO5,    "6")
+  field(LNK5,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+#
+# field(DO6,    "1")
+#
+# Version llrf_xem7_TXA_Rev6.bit does not have Enbl:Arm -
+# --- we should set Enbl:Rst back to 0 (otherwise we get all zeros in content)!
+# field(LNK6,   "$(S1){$(D1)-$(SD6)}Enbl:Arm PP")
+  field(DO6,    "0")
+  field(LNK6,   "$(S1){$(D1)-$(SD6)}Enbl:Rst PP")
+  field(DLY6,   "0.5")
+#
+  field(DO7,    "1")
+  field(LNK7,   "$(S1){$(D1)-$(SD6)}State:ArmMsk-Calc.PROC PP")
+  field(DLY7,   "0.3")
+  field(TPRO,   "1")
+}
+
+record(calcout, "$(S1){$(D1)-$(SD6)}State:ArmMsk-Calc") {
+  field(CALC,   "A&B?2:1")
+  field(INPA,   "$(S1){$(D1)}DI:Ep2F-I")
+  field(INPB,   "32768")
+  field(ODLY,   "0.2")
+  field(OUT,    "$(S1){$(D1)-$(SD6)}State:ArmMsk PP")
+  field(TPRO,   "1")
+}
+
+record(longout, "$(S1){$(D1)-$(SD6)}State:ArmMsk") {
+  field(PINI,   "YES")
+  field(FLNK,   "$(S1){$(D1)-$(SD6)}State:Arm02")
+  field(TPRO,   "1")
+}
+
+record(seq,     "$(S1){$(D1)-$(SD6)}State:Arm02") {
+  field(SELM,   "Mask")
+  field(SELL,   "$(S1){$(D1)-$(SD6)}State:ArmMsk")
+  field(SHFT,   "0")
+  field(DO0,    "1")
+  field(LNK0,   "$(S1){$(D1)-$(SD6)}State:Arm03.PROC PP")
+  field(DO1,    "0")
+  field(LNK1,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts  PP")
+  field(TPRO,   "1")
+}
+
+record(seq,     "$(S1){$(D1)-$(SD6)}State:Arm03") {
+  field(DO0,    "1")
+  field(LNK0,   "$(S1){$(D1)-$(SD6)}Enbl:Arm PP")
+  field(DLY0,   "0.1")
+  field(FLNK,   "$(S1){$(D1)-$(SD6)}State:Prog-Calc")
+  field(TPRO,   "1")
+}
+
+record(calcout, "$(S1){$(D1)-$(SD6)}State:Prog-Calc") {
+  field(CALC,   "A+1")
+  field(INPA,   "$(S1){$(D1)-$(SD6)}State:Prog-Sts")
+  field(OUT,    "$(S1){$(D1)-$(SD6)}State:Prog-Sts PP")
+  field(FLNK,   "$(S1){$(D1)-$(SD6)}State:ArmMsk-Calc")
+  field(TPRO,   "1")
+}
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+record(bo,       "$(S1){$(D1)-$(SD6)}Cmd:Read") {
+  field(DESC,    "Circ buf read:")
+  field(ZNAM,    "Idle")
+  field(ONAM,    "Read")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}State:Read")
+# field(TPRO,    "1")
+}
+
+record(seq,      "$(S1){$(D1)-$(SD6)}State:Read") {
+    field(SELM,  "Mask")
+    field(SELL,  "$(S1){$(D1)-$(SD6)}Cmd:Read")
+    field(SHFT,  "0")
+    field(DOL0,  "$(S1){$(D1)-$(SD6)}Cmd:Read")
+    field(LNK0,  "$(S1){$(D1)-$(SD6)}Val:IQ0-I.PROC")
+    field(TPRO,  "1")
+}
+
+record(acalcout, "$(S1){$(D1)-$(SD6)}Val:IQT-Calc") {
+  field(PINI,    "YES")
+  field(CALC,    "IX+5")
+  field(NELM,    "16")
+  field(NUSE,    "16")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}Val:IQT-I PP")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}Val:IQT-I") {
+  field(FTVL,    "SHORT")
+  field(NELM,    "16")
+}
+
+record(longin,   "$(S1){$(D1)-$(SD6)}Time:Trig") {
+  field(DTYP,    "asynInt32")
+  field(INP,     "@asyn($(PORT),0)RAM TS")
+  field(SCAN,    "I/O Intr")
+  field(FLNK,     "$(S1){$(D1)-$(SD6)}Time:T0")
+}
+
+record(stringin, "$(S1){$(D1)-$(SD6)}Time:T0") {
+  field(DESC,    "SDRAM Triggered:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Sts:Trig1-Calc")
+}
+
+record(calcout,  "$(S1){$(D1)-$(SD6)}Sts:Trig1-Calc") {
+  field(CALC,    "A")
+  field(INPA,    "$(S1){$(D1)-$(SD6)}Time:Trig")
+  field(OOPT,    "On Change")
+  field(DOPT,    "Use OCAL")
+  field(OCAL,    "1")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}Sts:Trig PP")
+}
+
+record(bo,       "$(S1){$(D1)-$(SD6)}Sts:Trig") {
+  field(ZNAM,    "Idle")
+  field(ONAM,    "READ IN PROGRESS")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}Val:IQ0-I") {
+    field(DESC,  "Circ buf raw:")
+    field(DTYP,  "asynInt16ArrayIn")
+    field(INP ,  "@asyn($(PORT),$(ADDR))CIRC IQ")
+    field(SCAN,  "I/O Intr")
+    field(FTVL,  "SHORT")
+#268435456 = 256M = 0x10000000 short values
+#=16777216 =  16M = values long samples
+    field(NELM,  "$(NELM1)")
+    field(FLNK,  "$(S1){$(D1)-$(SD6)}Cnt:TrigA")
+#   field(TPRO,  "1")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)}Cnt:TrigA") {
+ field(SNAM,     "TrigA")
+ field(FTA ,     "SHORT")
+ field(NOA ,     "$(NELM1)")
+ field(INPA,     "$(S1){$(D1)-$(SD6)}Val:IQ0-I")
+ field(FTVA,     "ULONG")
+ field(NOVA,     "1")
+ field(OUTA,     "$(S1){$(D1)-$(SD6)}Pos:Page")
+ field(FTVB,     "ULONG")
+ field(NOVB,     "1")
+ field(OUTB,     "$(S1){$(D1)-$(SD6)}Val:TrAOdd")
+ field(FLNK,     "$(S1){$(D1)-$(SD6)}Pos:Page")
+#field(TPRO,     "1")
+}
+
+record(longin,   "$(S1){$(D1)-$(SD6)}Pos:Page") {
+  field(DESC,    "Trigger Addr:")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Val:TrAOdd")
+# field(TPRO,     "1")
+}
+
+record(longin,   "$(S1){$(D1)-$(SD6)}Val:TrAOdd") {
+  field(DESC,    "Odd/Even:")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:Unwrap")
+# field(TPRO,     "1")
+}
+
+record(longin,   "$(S1){$(D1)-$(SD6)}Pos:P1") {
+# $(S1){$(D1)}DI:Ep2D-I wants to FLNK to this record
+  field(DESC,    "Trigger Adr:")
+  field(INP,     "$(S1){$(D1)-$(SD6)}Pos:Page")
+# If CB is NOT triggered => Don't unwrap!
+# field(TPRO,     "1")
+}
+#
+# Unwrap and display the circular buffer
+# 
+record(aSub,     "$(S1){$(D1)-$(SD6)}Cmd:Unwrap") {
+ field(SNAM,     "CircUnwr")
+ field(FTA ,     "SHORT")
+ field(FTB,      "ULONG")
+ field(FTC,      "ULONG")
+ field(NOA ,     "$(NELM1)")
+ field(FTVA,     "SHORT")
+ field(NOVA,     "$(NELM1)")
+ field(INPA,     "$(S1){$(D1)-$(SD6)}Val:IQ0-I")
+ field(INPB,     "$(S1){$(D1)-$(SD6)}Pos:Page")
+ field(INPC,     "$(S1){$(D1)-$(SD6)}Val:TrAOdd")
+ field(OUTA,     "$(S1){$(D1)-$(SD6)}Val:IQ1-Buf")
+ field(FLNK,     "$(S1){$(D1)-$(SD6)}Val:IQ1-Buf")
+#field(TPRO,     "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}Val:IQ1-Buf") {
+  field(DESC,    "Circ buf unwrapped:")
+  field(FTVL,    "SHORT")
+#268435456 = 256M = 0x10000000 short values
+#=16777216 =  16M = values long samples
+  field(NELM,    "$(NELM1)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:Invert")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)}Cmd:Invert") {
+#
+# Invert every second samplegroup of 16, -I, -Q to I, Q
+#
+ field(SNAM,     "CircInvPairs")
+ field(FTA ,     "SHORT")
+ field(NOA ,     "$(NELM1)")
+ field(FTVA,     "SHORT")
+ field(NOVA,     "$(NELM1)")
+ field(INPA,     "$(S1){$(D1)-$(SD6)}Val:IQ1-Buf")
+ field(OUTA,     "$(S1){$(D1)-$(SD6)}Val:IQ2-Buf ")
+ field(FLNK,     "$(S1){$(D1)-$(SD6)}Val:IQ2-Buf")
+#field(TPRO,     "1")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}Val:IQ2-Buf") {
+  field(DESC,  "Circ buf signed:")
+  field(FTVL,  "SHORT")
+#268435456 = 256M = 0x10000000 short values
+# 16M = 0x01000000 short values
+  field(NELM,  "$(NELM1)")
+  field(FLNK,  "$(S1){$(D1)-$(SD6)}Cmd:Part")
+}
+
+#
+# Separate parts with signal and quadrant alignment
+#
+# Input data: unwrapped 256Mb waveform of I/Q values as short integers: $(S1){$(D1)-$(SD6)}Circbuf-I2_
+# Output 8 waveforms, one for each channel, with I/Q values $(S1){$(D1)-$(SD6)}Ch0:I-I, $(S1){$(D1)-$(SD6)}Ch0:Q-I ... $(S1){$(D1)-$(SD6)}Ch4:I-I, $(S1){$(D1)-$(SD6)}Ch4:Q-I ...
+#
+
+record(aSub,     "$(S1){$(D1)-$(SD6)}Cmd:Part") {
+  field(DESC,    "Circ buf extract:")
+  field(SNAM,    "CircPart")
+  field(NOA,     "$(NELM1)")
+  field(FTA,     "SHORT")
+  field(INPA,    "$(S1){$(D1)-$(SD6)}Val:IQ2-Buf")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}Pos:Page")
+# field(INPB,    "$(S1){$(D1)-$(SD6)}Val:Smpl-Calc")
+#
+  field(NOVA,    "$(NELM2)")
+  field(FTVA,    "DOUBLE")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I MMS")
+#
+  field(NOVB,    "$(NELM2)")
+  field(FTVB,    "DOUBLE")
+  field(OUTB,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I MMS")
+#
+  field(NOVC,    "$(NELM2)")
+  field(FTVC,    "DOUBLE")
+  field(OUTC,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I MMS")
+#
+  field(NOVD,    "$(NELM2)")
+  field(FTVD,    "DOUBLE")
+  field(OUTD,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I MMS")
+#
+  field(NOVE,    "$(NELM2)")
+  field(FTVE,    "DOUBLE")
+  field(OUTE,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I MMS")
+#
+  field(NOVF,    "$(NELM2)")
+  field(FTVF,    "DOUBLE")
+  field(OUTF,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I MMS")
+#
+  field(NOVG,    "$(NELM2)")
+  field(FTVG,    "DOUBLE")
+  field(OUTG,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I MMS")
+#
+  field(NOVH,    "$(NELM2)")
+  field(FTVH,    "DOUBLE")
+  field(OUTH,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I MMS")
+#
+  field(NOVI,    "$(NELM2)")
+  field(FTVI,    "DOUBLE")
+  field(OUTI,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I MMS")
+#
+  field(NOVJ,    "$(NELM2)")
+  field(FTVJ,    "DOUBLE")
+  field(OUTJ,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I MMS")
+#
+  field(NOVK,    "$(NELM2)")
+  field(FTVK,    "DOUBLE")
+  field(OUTK,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I MMS")
+#
+  field(NOVL,    "$(NELM2)")
+  field(FTVL,    "DOUBLE")
+  field(OUTL,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I MMS")
+#
+  field(NOVM,    "$(NELM2)")
+  field(FTVM,    "DOUBLE")
+  field(OUTM,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I MMS")
+#
+  field(NOVN,    "$(NELM2)")
+  field(FTVN,    "DOUBLE")
+  field(OUTN,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I MMS")
+#
+  field(NOVO,    "$(NELM2)")
+  field(FTVO,    "DOUBLE")
+  field(OUTO,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I MMS")
+#
+  field(NOVP,    "$(NELM2)")
+  field(FTVP,    "DOUBLE")
+  field(OUTP,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I MMS")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I")
+# field(TPRO,    "1")
+}
+
+record(acalcout, "$(S1){$(D1)-$(SD6)}T:CircCnt_Fill_") {
+  field(DESC,    "Fills circ buf X:")
+  field(CALC,    "IX")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}T:CircCnt-I")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:CircCnt-I")
+  field(PINI,    "YES")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}T:CircCnt-I") {
+  field(DESC,    "Circular buffer X:")
+  field(FTVL,    "ULONG")
+# NELM2 = 0x1A0000 =  1 703 936 = each (of 5 scope) sample arrays
+# NELM2 = 0x100000 = 16 777 216 = each (of 8 scope) sample arrays
+  field(NELM,    "$(NELM2)")
+  field(EGU ,    "Count")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:CircPeriod_")
+}
+
+record(calc,     "$(S1){$(D1)-$(SD6)}T:CircPeriod_") {
+  field(DESC,    "Circ clk period:")
+  field(CALC,    "(A/B)*D")
+  field(INPA,    "$(S1){$(D1)}Val:ScaleDAC")
+  field(INPB,    "$(S1){$(D1)}Freq:I")
+  field(INPD,    "1E+03")
+  field(EGU,     "ms")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:CircXScale_")
+}
+
+record(acalcout, "$(S1){$(D1)-$(SD6)}T:CircXScale_") {
+  field(CALC,    "AA*B*C")
+  field(INAA,    "$(S1){$(D1)-$(SD6)}T:CircCnt-I")
+  field(INPB,    "$(S1){$(D1)-$(SD6)}T:CircPeriod_")
+# Circular buffer stores 2 values, I and Q, of 8 multiplexed channels
+# Thus each sample interval on time scale is index * clock (25 ns) * (2*8)
+# 2*8 = 16 = INPC
+  field(INPC,    "16.0")
+  field(OOPT,    "Every Time")
+  field(DOPT,    "Use CALC")
+  field(NELM,    "$(NELM2)")
+  field(NUSE,    "$(NELM2)")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}T:Circ-I")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:Circ-I")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}T:Circ-I") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "ms")
+  field(NELM,    "$(NELM2)")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:Circ2_")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)}T:Circ2_") {
+  field(DESC,    "Decimate:")
+  field(SNAM,    "Decimate")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)}T:Circ-I")
+  field(INPB,    "0")
+  field(INPC,    "16384")
+  field(FTVA,    "DOUBLE")
+  field(NOVA,    "$(NELM3)")
+  field(OUTA,    "$(S1){$(D1)-$(SD6)}T:Circ2-I")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}T:Circ2-I")
+}
+
+record(waveform, "$(S1){$(D1)-$(SD6)}T:Circ2-I") {
+  field(FTVL,    "DOUBLE")
+  field(EGU,     "ms")
+# Decimated by factor 16384, NELM3 should be 1024 (<= 16 777 216 / 16384)
+  field(NELM,    "$(NELM3)")
+}
+
+record(longout,  "$(S1){$(D1)-$(SD6)}Val:Scale") {
+   field(VAL,    "32767")
+   field(PINI,   "YES")
+}
+#======================================================================
+#
+# Dump circular buffer into a ASCII file
+#
+# Input:
+# Waveform with timestamps in [ms] 
+# All waveforms are of length 0x100000 = 16 777 216
+# 16 waveforms, one for each channel,
+# with I/Q values $(S1){$(D1)-$(SD6)}Ch0:I-I, $(S1){$(D1)-$(SD6)}Ch0:Q-I ... $(S1){$(D1)-$(SD6)}Ch4:I-I, $(S1){$(D1)-$(SD6)}Ch4:Q-I ...
+# Waveform with filename
+#
+
+record(waveform, "$(S1){$(D1)-$(SD6)}ID:File") {
+  field(DTYP,    "fileread")
+  field(INP,     "@$(L)BUF.TXT 0")
+  field(FTVL,    "CHAR")
+  field(NELM,    "128")
+  field(PINI,    "YES")
+  info(autosaveFields_pass0, "VAL")
+}
+
+# Val:I-I Chan:8 is the indicator of completeness:
+record(calcout,  "$(S1){$(D1)-$(SD6)-$(TD1):8}Val:I-I") {
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Time:T1")
+# field(TPRO,    "1")
+}
+
+record(stringin, "$(S1){$(D1)-$(SD6)}Time:T1") {
+  field(DESC,    "Dump started at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:Dump")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:NoFill-Seq")
+# field(TPRO,    "1")
+}
+#
+# Clear "Acquiring:" Disable READ, WRITE, Apply RESET
+#----------------------------------------------------
+#
+##################################################################
+#
+# C. Marques 10/12/2021: SDRAM Reset Ep 0x00, bit[2]
+# changed to DDR Reset Enable (PV: Enbl:Rst)
+# TrigIn 0x40 bit[7] re-purposed from sdram arm
+# to DDR Reset Trigger. Therefore this Rst:Cmd renamed to Rst:Cmd_
+# Here disable RESET Enbl:Rst = 0
+record(seq,      "$(S1){$(D1)-$(SD6)}Cmd:NoFill-Seq") {
+  field(DESC,    "Clear Acquiring:")
+  field(DO1,     "0")
+  field(LNK1,    "$(S1){$(D1)-$(SD6)}Enbl:Write PP")
+  field(DO2,     "0")
+  field(LNK2,    "$(S1){$(D1)-$(SD6)}Enbl:Read PP")
+#  field(DO3,     "1")
+#  field(LNK3,    "$(S1){$(D1)-$(SD6)}Rst:Cmd PP")
+  field(DO3,     "0")
+  field(LNK3,    "$(S1){$(D1)-$(SD6)}Enbl:Rst PP")
+  field(DO4,     "0")
+  field(LNK4,    "$(S1){$(D1)-$(SD6)}DI:Fill-Sts PP")
+  field(FLNK,   "$(S1){$(D1)-$(SD6)}Cmd:Dump")
+}
+
+record(aSub,     "$(S1){$(D1)-$(SD6)}Cmd:Dump") {
+  field(DESC,    "Dump circ buf into file:")
+  field(SNAM,    "CircDump")
+  field(NOA,     "$(NELM2)")
+  field(FTA,     "DOUBLE")
+  field(INPA,    "$(S1){$(D1)-$(SD6)}T:Circ-I")
+#
+  field(NOB,     "$(NELM2)")
+  field(FTB,     "DOUBLE")
+  field(INPB,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:I-I MMS")
+#
+  field(NOC,     "$(NELM2)")
+  field(FTC,     "DOUBLE")
+  field(INPC,    "$(S1){$(D1)-$(SD6)-$(TD1):0}Val:Q-I MMS")
+#
+  field(NOD,     "$(NELM2)")
+  field(FTD,     "DOUBLE")
+  field(INPD,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:I-I MMS")
+#
+  field(NOE,     "$(NELM2)")
+  field(FTE,     "DOUBLE")
+  field(INPE,    "$(S1){$(D1)-$(SD6)-$(TD1):1}Val:Q-I MMS")
+#
+  field(NOF,     "$(NELM2)")
+  field(FTF,     "DOUBLE")
+  field(INPF,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:I-I MMS")
+#
+  field(NOG,     "$(NELM2)")
+  field(FTG,     "DOUBLE")
+  field(INPG,    "$(S1){$(D1)-$(SD6)-$(TD1):2}Val:Q-I MMS")
+#
+  field(NOH,     "$(NELM2)")
+  field(FTH,     "DOUBLE")
+  field(INPH,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:I-I MMS")
+#
+  field(NOI,     "$(NELM2)")
+  field(FTI,     "DOUBLE")
+  field(INPI,    "$(S1){$(D1)-$(SD6)-$(TD1):3}Val:Q-I MMS")
+#
+  field(NOJ,     "$(NELM2)")
+  field(FTJ,     "DOUBLE")
+  field(INPJ,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:I-I MMS")
+#
+  field(NOK,     "$(NELM2)")
+  field(FTK,     "DOUBLE")
+  field(INPK,    "$(S1){$(D1)-$(SD6)-$(TD1):4}Val:Q-I MMS")
+#======================================================================
+#
+  field(NOL,     "$(NELM2)")
+  field(FTL,     "DOUBLE")
+  field(INPL,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:I-I MMS")
+#
+  field(NOM,     "$(NELM2)")
+  field(FTM,     "DOUBLE")
+  field(INPM,    "$(S1){$(D1)-$(SD6)-$(TD1):5}Val:Q-I MMS")
+#
+  field(NON,     "$(NELM2)")
+  field(FTN,     "DOUBLE")
+  field(INPN,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:I-I MMS")
+#
+  field(NOO,     "$(NELM2)")
+  field(FTO,     "DOUBLE")
+  field(INPO,    "$(S1){$(D1)-$(SD6)-$(TD1):6}Val:Q-I MMS")
+#
+  field(NOP,     "$(NELM2)")
+  field(FTP,     "DOUBLE")
+  field(INPP,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:I-I MMS")
+#
+  field(NOQ,     "$(NELM2)")
+  field(FTQ,     "DOUBLE")
+  field(INPQ,    "$(S1){$(D1)-$(SD6)-$(TD1):7}Val:Q-I MMS")
+#
+  field(NOR,     "128")
+  field(FTR,     "CHAR")
+  field(INPR,    "$(S1){$(D1)-$(SD6)}ID:File")
+#
+  field(NOS,     "1")
+  field(FTS,     "ULONG")
+  field(INPS,    "$(S1){$(D1)-$(SD6)}Pos:Page")
+#
+  field(NOT,     "1")
+  field(FTT,     "STRING")
+  field(INPT,    "$(S1){$(D1)-$(SD6)}Time:T0")
+#
+  field(NOU,     "2")
+  field(FTU,     "DOUBLE")
+  field(INPU,    "$(S1){$(D1)-$(SD0)}Val:IQWut-I MMS")
+#
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:Time")
+# field(TPRO,    "1")
+}
+
+record(stringin, "$(S1){$(D1)-$(SD6)}Cmd:Time") {
+  field(DESC,    "Dump completed at:")
+  field(DTYP,    "Soft Timestamp")
+  field(INP,     "@%m/%d/%Y %H:%M:%S.%03f")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Cmd:Fcpy-seq")
+}
+#
+# In 30 seconds notify Elauncher for fcpy:
+#
+record(seq,      "$(S1){$(D1)-$(SD6)}Cmd:Fcpy-seq") {
+  field(DESC,    "Fcpy file:")
+  field(DO1,     "1")
+# field(LNK1,    "$(S1){$(D1)}Cmd:Fcpy CPP")
+# field(LNK1,    "$(S1){$(D1)-$(SD6)}Val:Dummy")
+  field(DLY1,    "20")
+  field(FLNK,    "$(S1){$(D1)-$(SD6)}Sts:Trig2-Calc")
+}
+
+record(calcout,  "$(S1){$(D1)-$(SD6)}Sts:Trig2-Calc") {
+  field(CALC,    "0")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}Sts:Trig PP")
+}
+
+# Sep. 25, 2017: Added External Circular Buffer
+# Trigger Enable (bit 9 of EP SDRAM
+
+record(bo,       "$(S1){$(D1)-$(SD6)}Enbl:ExTr-SP") {
+  field(ZNAM,    "Disable")
+  field(ONAM,    "Enable")
+  field(OUT,     "$(S1){$(D1)-$(SD6)}Enbl:ExTr_ PP")
+  info(autosaveFields_pass0, "VAL")
+}
+
+record(longout,  "$(S1){$(D1)-$(SD6)}Enbl:ExTr_") {
+  field(DTYP,    "asynInt32")
+  field(OMSL,    "closed_loop")
+  field(DOL,     "$(S1){$(D1)-$(SD6)}Enbl:ExTr-SP")
+  field(OUT,     "@asyn($(PORT),0)Enbl EBT")
+}

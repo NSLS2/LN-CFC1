@@ -1,0 +1,149 @@
+FF:
+Amplitude:
+C=0.148
+D=51.0
+E=176.0
+F=215.0
+G=0.847
+H=0
+I=307.0
+J=450.0
+K=L=0
+
+Phase:
+C=1.0
+D=51.0
+E=176.0
+F=215.0
+G=1.0
+H=I=0
+J=450.0
+K=411.0
+L=-133.0
+
+Booster ramp: Amplitude:
+(B<D)?C:((B<E)?(C+((G-C)/(E-D))*(B-D)):((B<F)?G:((B<I)?(G-((G-C)/(I-F))*(B-F)):C)))
+Phase:
+C+L
+
+CW: Amplitude:
+C
+Phase:
+C+L
+
+SFunc: Amplitude:
+(B<D)?C:((B>J)?G:((C+0.5*(G-C)*(1-COS(A*(B-D)/(J-D))))))
+Phase:
+(B<D)?(C+L):((B>J)?(G+L):((C+L+0.5*(G-C)*(1-COS(A*(B-D)/(J-D))))))
+
+Pulse: Amplitude:
+(B<150 || B>350)?0:0.5
+Phase:
+C+L
+
+Curve: Amplitude:
+(B<E || B>K)?(0.5*C):(C+C*0.5*SIN(2*A*(B-E)/(K-E)-A/2))
+Phase:
+C+L
+
+Test 1: Amplitude:
+(B<256)?(B/1024):(0.256-(B-256)/1024)
+Phase:
+(B<256)?(B/1024):(0.256-(B-256)/1024)
+
+Test 2: Amplitude:
+C
+Phase:
+(B<256)?(B*C/256):(C-(B-256)*(C/256))
+
+File: Amplitude:
+@/epics/iocs/BR-CFC/Ampl.TXT 1
+Phase:
+@/epics/iocs/BR-CFC/Phas.TXT 1
+
+FB table:
+
+FF:
+Amplitude:
+C=0.148
+D=51.0
+E=176.0
+F=215.0
+G=0.451
+H=0
+I=307.0
+J=450.0
+K=L=0
+
+Phase:
+C=2.569
+D=51.0
+E=176.0
+F=215.0
+G=1.0
+H=I=0
+J=450.0
+K=2.569
+L=-133.607
+
+Booster ramp: Amplitude:
+(B<D)?C:((B<E)?(C+((G-C)/(E-D))*(B-D)):((B<F)?G:((B<I)?(G-((G-C)/(I-F))*(B-F)):C)))
+Phase:
+(B<D)?(C+L):((B<E)?(C+L+(K-C)/(E-D)*(B-D)):K+L)
+
+CW: Amplitude:
+C
+Phase:
+C+L
+
+SFunc: Amplitude:
+(B<D)?C:((B>J)?G:((C+0.5*(G-C)*(1-COS(A*(B-D)/(J-D))))))
+Phase:
+(B<D)?(C+L):((B>J)?(G+L):((C+L+0.5*(G-C)*(1-COS(A*(B-D)/(J-D))))))
+
+Pulse: Amplitude:
+(B<150 || B>350)?0:0.2
+Phase:
+C+L
+
+Curve: Amplitude:
+(B<E || B>K)?(0.5*C):(C+C*0.5*SIN(2*A*(B-E)/(K-E)-A/2))
+Phase:
+(B<E || B>K)?(C+L):(C+L)
+
+Test 1: Amplitude:
+(B<256)?(B/1024):(0.256-(B-256)/1024)
+Phase:
+(B<256)?(B/1024):(0.256-(B-256)/1024)
+
+Test 2: Amplitude:
+C
+Phase:
+(B<256)?(B*C/256):(C-(B-256)*(C/256))
+
+File: Amplitude:
+@/epics/iocs/BR-CFC/Ampl.TXT 1
+Phase:
+@/epics/iocs/BR-CFC/Phas.TXT 1
+
+
+JAN 15, 2015:
+
+DOUBLE S-FUNCTION RAMP:
+
+Amplitude:
+
+L:=(G-C)/2;B<D?C:B<E?(C+L*(1-COS(A*(B-D)/(E-D))):(B<F?G:(B<I?C+L+L*COS(A*(B-F)/(I-F)):C)))
+
+C=0.148
+D=51.0
+E=176.0
+F=215.0
+G=0.451
+H=0
+I=307.0
+J=K=L=0
+
+
+
+
